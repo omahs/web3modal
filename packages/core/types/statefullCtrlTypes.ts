@@ -14,6 +14,7 @@ export interface ConfigOptions {
     | 'purple'
     | 'teal'
   ethereum?: EthereumOptions
+  uri?: string
 }
 
 export interface ConfigCtrlState extends ConfigOptions {

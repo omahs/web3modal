@@ -1,4 +1,4 @@
-import { ClientCtrl, ConnectModalCtrl, ModalToastCtrl } from '@web3modal/core'
+import { ClientCtrl, ConfigCtrl, ConnectModalCtrl, ModalToastCtrl } from '@web3modal/core'
 import { html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import '../../components/w3m-button'
@@ -24,7 +24,8 @@ export class W3mWalletConnectConnectorView extends LitElement {
   // -- lifecycle ---------------------------------------------------- //
   public constructor() {
     super()
-    this.getConnectionUri()
+    if (ConfigCtrl.state.uri) this.uri = ConfigCtrl.state.uri
+    else this.getConnectionUri()
   }
 
   // -- private ------------------------------------------------------ //

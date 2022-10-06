@@ -1,4 +1,10 @@
-import { ClientCtrl, ConnectModalCtrl, CoreHelpers, ExplorerCtrl } from '@web3modal/core'
+import {
+  ClientCtrl,
+  ConfigCtrl,
+  ConnectModalCtrl,
+  CoreHelpers,
+  ExplorerCtrl
+} from '@web3modal/core'
 import { html, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import '../../components/w3m-view-all-wallets-button'
@@ -19,16 +25,28 @@ export class W3mMobileWalletSelection extends LitElement {
     const isNameSimilar = compareTwoStrings(name, this.connector.name) >= 0.5
 
     if (ready && isNameSimilar) await ClientCtrl.ethereum().connectInjected()
-    else {
-      const { native, universal } = links
+    else if (ConfigCtrl.state.uri) {
+      const href = this.generateHrefFromUri(links, name, ConfigCtrl.state.uri)
+      CoreHelpers.openHref(href)
+    } else {
       await ClientCtrl.ethereum().connectLinking(uri => {
-        const href = universal
-          ? CoreHelpers.formatUniversalUrl(universal, uri, name)
-          : CoreHelpers.formatNativeUrl(native, uri, name)
+        const href = this.generateHrefFromUri(links, name, uri)
         CoreHelpers.openHref(href)
       })
+      ConnectModalCtrl.closeModal()
     }
-    ConnectModalCtrl.closeModal()
+  }
+
+  private generateHrefFromUri(
+    links: { native: string; universal?: string },
+    name: string,
+    uri: string
+  ) {
+    const { native, universal } = links
+
+    return universal
+      ? CoreHelpers.formatUniversalUrl(universal, uri, name)
+      : CoreHelpers.formatNativeUrl(native, uri, name)
   }
 
   private async onCoinbaseWallet() {

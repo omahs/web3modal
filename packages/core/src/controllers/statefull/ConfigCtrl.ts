@@ -10,7 +10,8 @@ const state = proxy<ConfigCtrlState>({
   configured: false,
   projectId: '',
   theme: isDarkMode() ? 'dark' : 'light',
-  accentColor: 'default'
+  accentColor: 'default',
+  uri: undefined
 })
 
 // -- controller --------------------------------------------------- //
